@@ -131,6 +131,7 @@ function! s:NeovimSend(config, text)
   " Neovim jobsend is fully asynchronous, it causes some problems with
   " iPython %cpaste (input buffering: not all lines sent over)
   " So this s:WritePasteFile can help as a small lock & delay
+
   call s:WritePasteFile(a:text)
   call chansend(str2nr(a:config["jobid"]), split(a:text, "\n", 1))
   " if b:slime_config is {"jobid": ""} and not configured
@@ -298,10 +299,7 @@ function! s:WritePasteFile(text)
   if !isdirectory(paste_dir)
     call mkdir(paste_dir, "p")
   endif
-  let output = system("cat > " . g:slime_paste_file, a:text)
-  if v:shell_error
-    echoerr output
-  endif
+  writefile(a:text, g:slime_paste_file, 'b')
 endfunction
 
 function! s:_EscapeText(text)
