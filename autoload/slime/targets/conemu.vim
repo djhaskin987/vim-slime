@@ -11,9 +11,9 @@ endfunction
 function! slime#targets#conemu#send(config, text)
   " use the selection register to send text to ConEmu using the windows clipboard (see help gui-clipboard)
   " save the current selection to restore it after send
-  let tmp = @*
-  let @* = a:text
+  let tmp = @'
+  let @' = a:text
   call slime#common#system("conemuc -guimacro:%s print", [a:config["HWND"]])
-  let @* = tmp
+  let @' = tmp
 endfunction
 
